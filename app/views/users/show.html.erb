@@ -1,0 +1,40 @@
+<% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this book from being saved:</h2>
+      <ul>
+        <% @user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+<% end %>
+<!-- ユーザーの詳細 -->
+<h1>User info</h1>
+<div>
+  <%= image_tag @user.get_profile_image(100,100) %>
+  <h3>name</h3>
+  <%= @user.name %>
+  <h3>introduction</h3>
+  <%= @user.introduction %>
+  <% if @user == current_user %>
+    <p><%= link_to "プロフィール編集", edit_user_path(@user) %></p>
+  <% end %>
+</div>
+
+<!-- ユーザーの投稿一覧 -->
+<h1>Books</h1>
+<% @books.each do |book| %>
+<div>
+  <p><%= image_tag book.user.get_profile_image(100,100) %></p>
+  <p><%= book.user.name %></p>
+  <span>
+    <%= link_to book.title, book_path(book) %>
+  </span>
+  <p><%= book.body %></p>
+  <% if book.user == current_user %>
+    <%= link_to "Edit", edit_book_path(book) %>
+    <%= link_to "Destroy", book_path(book), method: :delete, "data-confirm" => "本当に消しますか？" %>
+  <% end %>
+</div>
+<% end %>
+
